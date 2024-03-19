@@ -1,5 +1,5 @@
 # SQS_to_S3
-This tutorial explains how to write messages from an AWS SQS Dead Letter Queue to an S3 file, to prevent message expiration, then from S3 to a new SQS queue.
+This tutorial explains how to write messages from an AWS SQS Dead Letter Queue to an S3 file, to prevent message expiration, then from S3 to a new SQS queue. The node.js version is in the /nodejs directory and the python version is in the /python directory.
 
 ## Prerequisites
 * AWS CLI installed and configured
