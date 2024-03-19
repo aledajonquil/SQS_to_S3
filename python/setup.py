@@ -3,8 +3,8 @@ from setuptools import setup, find_packages
 setup(
     name='aws-messaging-tools',
     version='0.1.0',
-    author='Your Name',
-    author_email='your_email@example.com',
+    author='Aleda Jonquil',
+    author_email='aleda.domespace@gmail.com',
     description=('Tools for transferring messages between AWS SQS and S3'),
     license='MIT',
     keywords='AWS SQS S3 messaging boto3',
