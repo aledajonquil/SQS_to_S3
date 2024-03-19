@@ -1,0 +1,20 @@
+{
+  "name": "sqs_to_s3",
+  "version": "1.0.0",
+  "description": "Contains a file to transfer SQS messages from a Dead Letter Queue to S3 and another to write the messages from S3 to a queue.",
+  "main": "dlq_to_s3.js",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "sherloq-scripts"
+  },
+  "author": "Aleda Jonquil",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.536.0",
+    "@aws-sdk/client-sqs": "^3.536.0",
+    "@aws-sdk/credential-provider-ini": "^3.535.0",
+    "@aws-sdk/s3-request-presigner": "^3.536.0",
+    "node-fetch": "^3.3.2"
+  }
+}
