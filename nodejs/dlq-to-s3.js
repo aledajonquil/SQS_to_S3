@@ -3,21 +3,21 @@
  * This prevents messages from expiring in the DLQ by storing them for later processing.
  */
 
-const { SQSClient, ReceiveMessageCommand, DeleteMessageCommand } = require('@aws-sdk/client-sqs');
-const { GetObjectCommand, S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
-const { fromIni } = require("@aws-sdk/credential-provider-ini");
+import { SQSClient, ReceiveMessageCommand, DeleteMessageCommand } from '@aws-sdk/client-sqs';
+import { GetObjectCommand, S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { fromIni } from '@aws-sdk/credential-provider-ini';
 
 // AWS configuration
 const region = "your-region"; // Example: "us-east-1"
 const credentials = fromIni({ profile: 'your-profile' }); // Profile in your AWS credentials file
 
 // SQS and S3 configuration
-const sqsClient = new SQSClient({ region, credentials });
 const s3Client = new S3Client({ region, credentials });
+const sqsClient = new SQSClient({ region, credentials });
 
 // Replace these with your Dead Letter Queue URL and S3 bucket details
-const deadLetterQueueURL = 'your-dlq-url'; // Example: 'https://sqs.your-region.amazonaws.com/your-account-id/your-dlq-name'
 const bucketName = 'your-bucket-name'; // Example: 'your-dlq-messages-bucket'
+const deadLetterQueueURL = 'your-dlq-url'; // Example: 'https://sqs.your-region.amazonaws.com/your-account-id/your-dlq-name'
 const filePath = 'your-file-path'; // Example: 'dlq-messages.txt'
 
 // Function to receive messages from DLQ
