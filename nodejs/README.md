@@ -1,6 +1,6 @@
 # How To Use These Scripts
 ## Prerequisites
-* **Node.js and npm:** Ensure Node.js and npm are installed on your system. You can download them from the official Node.js website.
+* **Node.js and npm:** Ensure Node.js and npm are installed on your system. You can download them from the [official Node.js website](https://nodejs.org/en).
 * **AWS CLI:** While not strictly necessary, having the AWS CLI installed and configured on your machine is beneficial for managing AWS credentials. Install it following the instructions on AWS CLI official documentation and configure it by running aws configure.
 * **IAM Permissions:** The AWS account you use must have IAM permissions for SQS and S3 actions. Specifically, you'll need access to sqs:ReceiveMessage, sqs:DeleteMessage, sqs:SendMessage, s3:GetObject, and s3:PutObject.
 
