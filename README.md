@@ -3,6 +3,7 @@ This tutorial outlines a simple yet effective way to manage messages in AWS SQS 
 
 ## Prerequisites
 * Basic knowledge of JavaScript and AWS services (SQS and S3)
+* NPM installed
 
 ## Overview
 1. A script fetches messages from the DLQ and saves them into an S3 bucket.
