@@ -3,79 +3,82 @@
  * This allows for processing messages that were previously moved to a DLQ and stored in S3.
  */
 
-const { SQSClient, SendMessageBatchCommand } = require('@aws-sdk/client-sqs');
-const { GetObjectCommand, S3Client } = require('@aws-sdk/client-s3');
-const { fromIni } = require("@aws-sdk/credential-provider-ini");
+import { fromIni } from '@aws-sdk/credential-provider-ini';
+import { S3Client, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
+import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import fetch from 'node-fetch';
 
 // Generic AWS configuration
 const region = "your-region"; // Example: "us-east-1"
 const credentials = fromIni({ profile: 'your-profile' }); // Profile in your AWS credentials file
 
 // SQS and S3 configuration
-const sqsClient = new SQSClient({ region, credentials });
 const s3Client = new S3Client({ region, credentials });
+const sqsClient = new SQSClient({ region, credentials });
 
 // Replace these with your original SQS queue URL and S3 bucket details
-const queueURL = 'your-queue-url'; // Example: 'https://sqs.your-region.amazonaws.com/your-account-id/your-queue-name'
 const bucketName = 'your-bucket-name'; // Example: 'your-dlq-messages-bucket'
 const filePath = 'your-file-path'; // Example: 'dlq-messages.txt'
+const queueURL = 'your-queue-url'; // Example: 'https://sqs.your-region.amazonaws.com/your-account-id/your-queue-name'
 
-// Function to read messages from S3
-const readMessagesFromS3 = async () => {
+// Function to remove messages from file after they are sent to a queue
+const clearFileContentInS3 = async (bucket, key) => {
+  const command = new PutObjectCommand({
+    Bucket: bucket,
+    Key: key,
+    Body: ''
+  });
   try {
-    const data = await s3Client.send(new GetObjectCommand({
-      Bucket: bucketName,
-      Key: filePath,
-    }));
-    const bodyContents = await streamToString(data.Body);
-    return bodyContents.split('\n').filter(message => message.trim() !== '');
+    await s3Client.send(command);
+    console.log(`File content cleared in S3: ${key}`);
   } catch (error) {
-    console.error('Error reading from S3:', error);
+    console.error('Error clearing file content in S3:', error);
     throw error;
   }
 };
 
-// Helper function to convert stream to string
-function streamToString(stream) {
-  return new Promise((resolve, reject) => {
-    const chunks = [];
-    stream.on('data', (chunk) => chunks.push(chunk));
-    stream.on('error', reject);
-    stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf-8')));
+// Function to get file content from S3
+const getFileContentFromS3 = async (bucket, key) => {
+  const command = new GetObjectCommand({ Bucket: bucket, Key: key });
+  const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
+
+  try {
+    const response = await fetch(signedUrl);
+    const text = await response.text();
+    return text;
+  } catch (error) {
+    console.error('Error downloading file from S3:', error);
+    throw error;
+  }
+};
+
+// Function to send a message to SQS
+const sendMessageToSQS = async (messageBody) => {
+  const command = new SendMessageCommand({
+    QueueUrl: queueUrl,
+    MessageBody: messageBody
   });
-}
 
-// Function to re-queue messages to SQS
-const reQueueMessages = async (messages) => {
-  // SQS batch command can only handle up to 10 messages at a time
-  for (let i = 0; i < messages.length; i += 10) {
-    const batch = messages.slice(i, i + 10).map((msg, index) => ({
-      Id: String(index),
-      MessageBody: msg,
-    }));
-
-    const command = new SendMessageBatchCommand({
-      QueueUrl: queueURL,
-      Entries: batch
-    });
-
-    try {
-      await sqsClient.send(command);
-      console.log(`Successfully re-queued ${batch.length} messages`);
-    } catch (error) {
-      console.error('Error re-queuing messages:', error);
-    }
+  try {
+    await sqsClient.send(command);
+    console.log('Message sent to SQS:', messageBody);
+  } catch (error) {
+    console.error('Error sending message to SQS:', error);
+    throw error;
   }
 };
 
-// Main function to process the re-queuing
-const processReQueueing = async () => {
-  const messages = await readMessagesFromS3();
-  if (messages.length > 0) {
-    await reQueueMessages(messages);
-  } else {
-    console.log('No messages to re-queue');
+// Main function to read from S3 and send to SQS
+const processS3FileToSQS = async () => {
+  const fileContent = await getFileContentFromS3(bucketName, filePath);
+  const messages = fileContent.split('\n').filter(message => message.trim() !== '');
+
+  for (const message of messages) {
+    await sendMessageToSQS(message);
   }
+
+  await clearFileContentInS3(bucketName, filePath);
 };
 
-processReQueueing(); // Start the process
+processS3FileToSQS(); // Start the process
