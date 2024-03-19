@@ -3,7 +3,9 @@ This tutorial explains how to write messages from an AWS SQS Dead Letter Queue t
 
 ## Prerequisites
 * AWS CLI installed and configured
-* Node.js and npm installed
+* npm installed
+* Node.js installed, if using the node.js code
+* Python3 installed, if using the python code
 * Basic knowledge of JavaScript and AWS services (SQS and S3)
 
 ## Overview
