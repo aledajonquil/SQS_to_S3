@@ -5,7 +5,7 @@
 * **IAM Permissions:** The AWS account you use must have IAM permissions for SQS and S3 actions. Specifically, you'll need access to sqs:ReceiveMessage, sqs:DeleteMessage, sqs:SendMessage, s3:GetObject, and s3:PutObject.
 
 ## Setting Up Your Environment
-1. **Install AWS SDK for JavaScript:** Navigate to your project directory and run `npm install @aws-sdk/client-sqs @aws-sdk/client-s3` to install the necessary AWS SDK packages for SQS and S3 services.
+1. **Install the Package:** Navigate to your project directory and run `npm install` to install the necessary packages.
 2. **Configure AWS SDK:**
 The scripts use the default AWS credentials configured on your machine. You can set these up using the AWS CLI aws configure command.
 Alternatively, you can specify credentials directly in the scripts. However, for best practices and security, relying on the AWS credentials file or environment variables is recommended.
