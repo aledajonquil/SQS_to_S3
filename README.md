@@ -17,18 +17,21 @@ This tutorial explains how to write messages from an AWS SQS Dead Letter Queue t
 4. Create an S3 bucket to store the messages.
 
 ## Step 2: Transfer Messages from DLQ to S3
-Script Overview (dlq_to_s3.js):
+1. Script Overview (dlq_to_s3.js):
 
-Fetches messages from the DLQ.
-Writes the messages to a file in an S3 bucket.
-Deletes the messages from the DLQ once successfully saved to S3.
-Configuration:
+* Fetches messages from the DLQ.
+* Writes the messages to a file in an S3 bucket.
+* Deletes the messages from the DLQ once successfully saved to S3.
 
-Update the region, credentials, deadLetterQueueURL, bucketName, and filePath variables with your specific AWS configuration.
-Running the Script:
+2. Configuration:
 
-Install necessary packages: npm install @aws-sdk/client-sqs @aws-sdk/client-s3 @aws-sdk/credential-provider-ini.
-Run the script: node dlq_to_s3.js.
+* Update the region, credentials, deadLetterQueueURL, bucketName, and filePath variables with your specific AWS configuration.
+
+3. Running the Script:
+
+* Install necessary packages: npm install @aws-sdk/client-sqs @aws-sdk/client-s3 @aws-sdk/credential-provider-ini.
+* Run the script: node dlq_to_s3.js.
+
 Step 3: Re-queue Messages from S3 to SQS
 Script Overview (s3_to_queue.js):
 
