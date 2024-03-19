@@ -4,5 +4,5 @@
 3. Install Boto3 if you haven't already by running `pip install boto3`.
 4. Execute the script by running `python dlq_to_s3.py` and `python s3-to-sqs.py`.
 
-dlq-to-s3.py fetches messages from your DLQ, saves them into an S3 bucket, and deletes them from the DLQ to prevent re-processing of the same messages.
-s3-to-sqs.py writes those saved messages to an SQS queue.
+* dlq-to-s3.py fetches messages from your DLQ, saves them into an S3 bucket, and deletes them from the DLQ to prevent re-processing of the same messages.
+* s3-to-sqs.py writes those saved messages to an SQS queue.
