@@ -1,7 +1,7 @@
 # How To Use These Scripts
 ## Prerequisites
 
-* **Python Installation:** Ensure Python (version 3.6 or newer) is installed on your system. You can download Python from the [official Python website](https://www.python.org/ "Python Website").
+* **Python Installation:** Ensure Python (version 3.7 or newer) is installed on your system. You can download Python from the [official Python website](https://www.python.org/ "Python Website").
 * **AWS CLI:** Installing and configuring the AWS CLI is recommended for managing AWS credentials. Follow the installation guide on the [AWS CLI official documentation](https://aws.amazon.com/cli/ "AWS CLI Documentation") and configure it by running `aws configure`.
 * **IAM Permissions:** The AWS IAM user or role executing these scripts needs sufficient permissions for SQS and S3 services. The required permissions include sqs:ReceiveMessage, sqs:DeleteMessage, sqs:SendMessage, s3:GetObject, and s3:PutObject.
   
