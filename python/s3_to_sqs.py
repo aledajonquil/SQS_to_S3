@@ -1,14 +1,17 @@
 import boto3
 from botocore.exceptions import NoCredentialsError
 
-# Initialize S3 and SQS clients
-s3_client = boto3.client('s3', region_name='your-region')
-sqs_client = boto3.client('sqs', region_name='your-region')
+# Specify the AWS region
+aws_region = 'your-region'
+
+# Initialize Boto3 clients for SQS and S3 with an explicit region
+sqs_client = boto3.client('sqs', region_name=aws_region)
+s3_client = boto3.client('s3', region_name=aws_region)
 
 # Specify your S3 bucket details and the original SQS queue URL
-bucket_name = 'dlq-blockchain-dev'
-file_key = 'dlq_blockchain_messages.txt'  # The S3 object key (file name)
-queue_url = 'https://sqs.us-east-1.amazonaws.com/837995675398/AledaQ'
+bucket_name = 'your-bucket-name'
+file_key = 'your-filenamet'  # The S3 object key (file name)
+queue_url = 'url-of-your-queue'
 
 def clear_s3_file_content(bucket, key):
     """Clears the content of the specified S3 file by overwriting it with an empty string."""

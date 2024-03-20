@@ -1,14 +1,17 @@
 import boto3
 from botocore.exceptions import NoCredentialsError
 
-# Initialize Boto3 clients for SQS and S3
-sqs_client = boto3.client('sqs')
-s3_client = boto3.client('s3')
+# Specify the AWS region, example 'us-east-1'
+aws_region = 'your-region'
+
+# Initialize Boto3 clients for SQS and S3 with an explicit region
+sqs_client = boto3.client('sqs', region_name=aws_region)
+s3_client = boto3.client('s3', region_name=aws_region)
 
 # AWS SQS and S3 configuration
-dead_letter_queue_url = 'https://sqs.us-east-1.amazonaws.com/837995675398/BlockchainTransaction'
-bucket_name = 'dlq-blockchain-dev'
-file_path = 'dlq_blockchain_messages.txt'
+dead_letter_queue_url = 'url-of-your-dead-letter-queue'
+bucket_name = 'your-bucket-name'
+file_path = 'your-filename'
 
 def fetch_messages_from_dlq():
     """
@@ -18,7 +21,7 @@ def fetch_messages_from_dlq():
         messages = sqs_client.receive_message(
             QueueUrl=dead_letter_queue_url,
             MaxNumberOfMessages=10,  # Adjust based on your needs
-            WaitTimeSeconds=20  # Long polling
+            WaitTimeSeconds=20
         )
         return messages.get('Messages', [])
     except NoCredentialsError:
