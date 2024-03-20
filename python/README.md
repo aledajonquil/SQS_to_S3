@@ -14,11 +14,11 @@ Ensure your AWS credentials (found in ~/.aws/credentials) and region (found in ~
 This script is designed to transfer messages from an AWS SQS Dead Letter Queue (DLQ) to an S3 bucket. This ensures that messages are not lost after the DLQ's retention period expires.
 * Open dlq_to_s3.py in your preferred text editor.
 * Modify the placeholders for region_name, dead_letter_queue_url, bucket_name, and file_key to match your specific AWS configuration details.
-* Execute the script by running `python dlq-to-s3.py` in your terminal.
+* Execute the script by running `python dlq_to_s3.py` in your terminal.
 
 ## Using s3_to_queue.py
 This script reads messages from an S3 bucket and re-queues them to the original SQS queue. This is useful for processing messages that were previously moved to a DLQ.
 * Open s3_to_queue.py in your text editor.
 * Update the region_name, queueURL, bucket_name, and file_key with your AWS configuration details.
-* Run the script using the command `python s3-to-queue.py` in your terminal.
+* Run the script using the command `python s3_to_queue.py` in your terminal.
 
