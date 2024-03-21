@@ -20,7 +20,7 @@ const bucketName = 'your-bucket-name'; // Example: 'your-dlq-messages-bucket'
 const deadLetterQueueURL = 'your-dlq-url'; // Example: 'https://sqs.your-region.amazonaws.com/your-account-id/your-dlq-name'
 const filePath = 'your-file-path'; // Example: 'dlq-messages.txt'
 
-// Function to receive messages from DLQ
+// Receive messages from the DLQ
 const receiveMessages = async () => {
   const command = new ReceiveMessageCommand({
     QueueUrl: deadLetterQueueURL,
@@ -37,7 +37,7 @@ const receiveMessages = async () => {
   }
 };
 
-// Function to get existing content from S3 (if any)
+// Get existing content from S3 (if any)
 const getExistingS3Content = async () => {
   try {
     const data = await s3Client.send(new GetObjectCommand({
@@ -66,7 +66,7 @@ function streamToString(stream) {
   });
 }
 
-// Function to write messages to S3
+// Write messages to S3
 const writeToS3 = async (messages) => {
   const existingContent = await getExistingS3Content();
   const newContent = messages.map(msg => msg.Body).join('\n');
@@ -86,7 +86,7 @@ const writeToS3 = async (messages) => {
   }
 };
 
-// Function to delete a message from the DLQ
+// Delete a message from the DLQ
 const deleteMessage = async (receiptHandle) => {
   const deleteParams = {
     QueueUrl: deadLetterQueueURL,
@@ -101,7 +101,6 @@ const deleteMessage = async (receiptHandle) => {
   }
 };
 
-// Main function to process DLQ messages
 const processDLQMessages = async () => {
   const messages = await receiveMessages();
   if (messages.length > 0) {
