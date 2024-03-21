@@ -7,11 +7,9 @@ import { SQSClient, ReceiveMessageCommand, DeleteMessageCommand } from '@aws-sdk
 import { GetObjectCommand, S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { fromIni } from '@aws-sdk/credential-provider-ini';
 
-// AWS configuration
 const region = "your-region"; // Example: "us-east-1"
 const credentials = fromIni({ profile: 'your-profile' }); // Profile in your AWS credentials file
 
-// SQS and S3 configuration
 const s3Client = new S3Client({ region, credentials });
 const sqsClient = new SQSClient({ region, credentials });
 
