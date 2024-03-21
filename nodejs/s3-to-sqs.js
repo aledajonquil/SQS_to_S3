@@ -9,11 +9,9 @@ import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import fetch from 'node-fetch';
 
-// Generic AWS configuration
 const region = "your-region"; // Example: "us-east-1"
 const credentials = fromIni({ profile: 'your-profile' }); // Profile in your AWS credentials file
 
-// SQS and S3 configuration
 const s3Client = new S3Client({ region, credentials });
 const sqsClient = new SQSClient({ region, credentials });
 
@@ -22,7 +20,7 @@ const bucketName = 'your-bucket-name'; // Example: 'your-dlq-messages-bucket'
 const filePath = 'your-file-path'; // Example: 'dlq-messages.txt'
 const queueURL = 'your-queue-url'; // Example: 'https://sqs.your-region.amazonaws.com/your-account-id/your-queue-name'
 
-// Function to remove messages from file after they are sent to a queue
+// Remove messages from file after they are sent to a queue
 const clearFileContentInS3 = async (bucket, key) => {
   const command = new PutObjectCommand({
     Bucket: bucket,
@@ -38,7 +36,7 @@ const clearFileContentInS3 = async (bucket, key) => {
   }
 };
 
-// Function to get file content from S3
+// Get file contents from S3
 const getFileContentFromS3 = async (bucket, key) => {
   const command = new GetObjectCommand({ Bucket: bucket, Key: key });
   const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
@@ -53,7 +51,7 @@ const getFileContentFromS3 = async (bucket, key) => {
   }
 };
 
-// Function to send a message to SQS
+// Send a message to SQS
 const sendMessageToSQS = async (messageBody) => {
   const command = new SendMessageCommand({
     QueueUrl: queueUrl,
@@ -69,7 +67,6 @@ const sendMessageToSQS = async (messageBody) => {
   }
 };
 
-// Main function to read from S3 and send to SQS
 const processS3FileToSQS = async () => {
   const fileContent = await getFileContentFromS3(bucketName, filePath);
   const messages = fileContent.split('\n').filter(message => message.trim() !== '');
